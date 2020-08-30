@@ -43,4 +43,13 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'out/*', fingerprint: true
+            publishCoverage adapters: 
+                [opencoverAdapter(mergeToOneReport: true, path: 'vtb.Utils.Tests/coverage.opencover.xml')], 
+                sourceFileResolver: sourceFiles('NEVER_STORE')
+        }
+    }
 }
