@@ -12,6 +12,7 @@ namespace vtb.Utils.Extensions
         {
             services.AddSingleton<ISystemClock>(new SystemClock());
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            return services;
         }
 
         public static IServiceCollection AddCorsPolicyWithOrigins(this IServiceCollection services, string[] origins)
