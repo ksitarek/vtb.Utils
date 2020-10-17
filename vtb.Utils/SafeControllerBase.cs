@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,6 @@ namespace vtb.Utils
     public abstract class SafeControllerBase : ControllerBase
     {
         protected readonly IDictionary<Type, Func<IActionResult>> _exceptionToResponseMap = new Dictionary<Type, Func<IActionResult>>();
-        private readonly ILogger<SafeControllerBase> _logger;
-
-        protected SafeControllerBase(ILogger<SafeControllerBase> logger)
-        {
-            _logger = logger;
-        }
 
         protected async Task<IActionResult> SafeInvoke(Func<Task<IActionResult>> func, Dictionary<Type, Func<IActionResult>> overrides = null)
         {
@@ -33,11 +28,11 @@ namespace vtb.Utils
 
                 if (!map.ContainsKey(exceptionType))
                 {
-                    _logger.LogError(e, $"UNHANDLED: {e.Message}");
+                    Log.Error(e, $"UNHANDLED: {e.Message}");
                     return StatusCode(500);
                 }
 
-                _logger.LogWarning(e, e.Message);
+                Log.Warning(e, e.Message);
 
                 var mapping = map[exceptionType];
                 return mapping.Invoke();
