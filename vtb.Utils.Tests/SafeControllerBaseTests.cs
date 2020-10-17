@@ -11,19 +11,12 @@ namespace vtb.Utils.Tests
 {
     public class SafeControllerBaseTests
     {
-        private Mock<ILogger<TestController>> _loggerMock;
         private TestController _controller;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            _loggerMock = new Mock<ILogger<TestController>>();
-        }
-
+        
         [SetUp]
         public void SetUp()
         {
-            _controller = new TestController(_loggerMock.Object);
+            _controller = new TestController();
         }
 
         [Test]
@@ -67,7 +60,7 @@ namespace vtb.Utils.Tests
 
         public class TestController : SafeControllerBase
         {
-            public TestController(ILogger<TestController> logger) : base(logger)
+            public TestController() : base()
             {
                 _exceptionToResponseMap.Add(typeof(KeyNotFoundException), NotFound);
             }
